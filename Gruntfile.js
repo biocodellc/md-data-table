@@ -131,6 +131,19 @@ module.exports = function (grunt) {
       }
     },
 
+    // transpile javascript files
+    babel: {
+      options: {
+        sourceMap: true,
+        presets: ['@babel/preset-env']
+      },
+      build: {
+        files: {
+          'dist/md-data-table.js': 'dist/md-data-table.js'
+        }
+      }
+    },
+
     // minify javascript files
     uglify: {
       build: {
@@ -193,6 +206,7 @@ module.exports = function (grunt) {
     'cssmin:build',
     'html2js:build',
     'concat:build',
+    'babel:build',
     'uglify:build'
   ]);
   
