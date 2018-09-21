@@ -18,8 +18,8 @@ function mdSelect($compile, $parse) {
 
     if(tableCtrl.$$rowSelect && self.id) {
       if(tableCtrl.$$hash.has(self.id)) {
-        var index = tableCtrl.selected.indexOf(tableCtrl.$$hash.get(self.id));
-
+        
+        var index = tableCtrl.selected.findIndex(m => getId(m) === self.id)
         // if the item is no longer selected remove it
         if(index === -1) {
           tableCtrl.$$hash.purge(self.id);
@@ -78,7 +78,11 @@ function mdSelect($compile, $parse) {
         return;
       }
 
-      tableCtrl.selected.splice(tableCtrl.selected.indexOf(self.model), 1);
+      const i = self.id
+        ? tableCtrl.selected.findIndex(m => getId(m) === self.id)
+        : tableCtrl.selected.indexOf(self.model);
+
+      tableCtrl.selected.splice(i, 1);
 
       if(angular.isFunction(self.onDeselect)) {
         self.onDeselect(self.model);
@@ -137,7 +141,7 @@ function mdSelect($compile, $parse) {
 
       if(tableCtrl.$$hash.has(self.id)) {
         // check if the item has been deselected
-        if(selected.indexOf(tableCtrl.$$hash.get(self.id)) === -1) {
+        if(!selected.find(m => getId(m) === self.id)) {
           tableCtrl.$$hash.purge(self.id);
         }
 
@@ -145,7 +149,7 @@ function mdSelect($compile, $parse) {
       }
 
       // check if the item has been selected
-      if(selected.indexOf(self.model) !== -1) {
+      if (selected.find(m => getId(m) === self.id)) {
         tableCtrl.$$hash.update(self.id, self.model);
       }
     }
